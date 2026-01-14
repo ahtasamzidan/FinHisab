@@ -1,22 +1,21 @@
-'use client'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from './supabaseClient'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
-
-export default function Home() {
-  const login = async () => {
-    await supabase.auth.signInWithOAuth({ provider: 'google' })
+function App() {
+  const loginWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'https://finhisab.vercel.app'
+      }
+    })
+    if (error) alert(error.message)
   }
 
   return (
-    <div style={{ padding: 40 }}>
-      <h1>FinHisab</h1>
-      <button onClick={login}>
-        Continue with Google
-      </button>
-    </div>
+    <button onClick={loginWithGoogle}>
+      Login with Google
+    </button>
   )
 }
+
+export default App
